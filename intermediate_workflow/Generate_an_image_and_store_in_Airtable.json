@@ -1,0 +1,154 @@
+{
+  "name": "Generate an image and store in Airtable",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1240,
+        -60
+      ],
+      "id": "97aad909-9ec4-45af-b9e9-c128fd4cf30c",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": "A cute cat eating a dinosaur",
+        "options": {
+          "returnImageUrls": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -1020,
+        -60
+      ],
+      "id": "b0fc62ac-466f-418b-97fb-d892b3c8833b",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "Yp9u8HHVt7ew40iR",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appT8aQptl1Gx3zrs",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl23GqXy8zuOlCru",
+          "mode": "list",
+          "cachedResultName": "Images",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs/tbl23GqXy8zuOlCru"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Image Prompt": "={{ $json.revised_prompt }}",
+            "Image": "=[\n  {\n    \"filename\": \"image.png\",\n    \"url\": \"{{ $json.url }}\"\n  }\n]"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Image Prompt",
+              "displayName": "Image Prompt",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Image",
+              "displayName": "Image",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -800,
+        -60
+      ],
+      "id": "45761d0d-89ff-45e1-8923-4a2dda7b61bd",
+      "name": "Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "af130366-65aa-4a49-85cc-c307e2d0c77e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "pEdFkLHPxX249pqO",
+  "tags": []
+}

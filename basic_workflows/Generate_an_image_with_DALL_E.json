@@ -1,0 +1,62 @@
+{
+  "name": "Generate an image with DALL-E",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1440,
+        -40
+      ],
+      "id": "97aad909-9ec4-45af-b9e9-c128fd4cf30c",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": "A cute cat eating a dinosaur",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -1220,
+        -40
+      ],
+      "id": "b0fc62ac-466f-418b-97fb-d892b3c8833b",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "Yp9u8HHVt7ew40iR",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "49c7181d-efea-4bc9-a830-828dd867c3eb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "pEdFkLHPxX249pqO",
+  "tags": []
+}
