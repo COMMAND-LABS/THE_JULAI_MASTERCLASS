@@ -1,0 +1,231 @@
+{
+  "name": "JSON2Video",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appT8aQptl1Gx3zrs",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl8EaQHZmY23kPsn",
+          "mode": "list",
+          "cachedResultName": "Scripts",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs/tbl8EaQHZmY23kPsn"
+        },
+        "filterByFormula": "{Active} = '1'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -680,
+        -20
+      ],
+      "id": "c0b80834-b457-4685-83c1-aa2886004ca4",
+      "name": "Get script",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "U0UoJUqDqx0lz2Sv",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appT8aQptl1Gx3zrs",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbla4eoB2l0LNsuUB",
+          "mode": "list",
+          "cachedResultName": "Segments",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs/tbla4eoB2l0LNsuUB"
+        },
+        "filterByFormula": "={Full Script} = {{ $('Get script').item.json.ID }}",
+        "options": {},
+        "sort": {
+          "property": [
+            {
+              "field": "ID"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -460,
+        -20
+      ],
+      "id": "e1c4e0eb-d651-41aa-9182-3f25425748f5",
+      "name": "Get segments",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "U0UoJUqDqx0lz2Sv",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -900,
+        -20
+      ],
+      "id": "fa2b1dba-9e61-4d3c-9f05-fae9754ddcf8",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"comment\": \"Scene\",\n  \"elements\": [\n    {{ $json[\"Video URL\"] ? {\n      \"type\": \"video\",\n      \"src\": $json[\"Video URL\"],\n      \"position\": \"center-center\",\n      \"duration\": $json['End Time'] - $json['Start Time'] \n    } : {\n      \"type\": \"image\",\n      \"src\": $json[\"Image URL\"],\n      \"zoom\": -1,\n      \"position\": \"center-center\",\n      \"duration\": $json['End Time'] - $json['Start Time'] \n    } }}\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        -20
+      ],
+      "id": "2f67531b-cbd0-45e2-9dbf-046c261b2f3e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.json2video.com/v2/movies",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"comment\": \"Video\",\n    \"resolution\": \"instagram-story\",\n    \"quality\": \"high\",\n    \"scenes\": {{ JSON.stringify($json.scenes) }},\n    \"elements\": [\n        {\n            \"type\": \"audio\",\n            \"src\": \"{{ $('Get script').item.json['Spoken Audio URL'] }}\"\n        }\n    ]\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        200,
+        -20
+      ],
+      "id": "8f58bfba-57bf-4535-b16b-6c62e2fa44c6",
+      "name": "Stitch Video Together",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "VPwMDsXmy5avyoE9",
+          "name": "JSON2Video API Header AAIVA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "scenes",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        -20
+      ],
+      "id": "4dc1b5ee-f11e-440a-b071-54d91b85c090",
+      "name": "Aggregate"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get script": {
+      "main": [
+        [
+          {
+            "node": "Get segments",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get script",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get segments": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Stitch Video Together",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4a465fe9-b996-4dab-acc8-8230a0854a3e",
+  "meta": {
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "SJAoLwJTvTojnKXL",
+  "tags": []
+}

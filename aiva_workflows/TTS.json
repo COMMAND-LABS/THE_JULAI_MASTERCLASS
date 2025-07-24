@@ -1,0 +1,377 @@
+{
+  "name": "TTS",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -520,
+        -180
+      ],
+      "id": "8a546b66-3d0a-46ce-8f4b-5239024cfa27",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appT8aQptl1Gx3zrs",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl8EaQHZmY23kPsn",
+          "mode": "list",
+          "cachedResultName": "Scripts",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs/tbl8EaQHZmY23kPsn"
+        },
+        "filterByFormula": "{Active} = '1'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -300,
+        -180
+      ],
+      "id": "d673915b-e13d-4f23-b988-2a0df4ded4be",
+      "name": "Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "U0UoJUqDqx0lz2Sv",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/EkK5I93UQWFDigLMpZcX",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "output_format",
+              "value": "mp3_44100_128"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $json.Script }}"
+            },
+            {
+              "name": "model_id",
+              "value": "eleven_multilingual_v2"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -80,
+        -180
+      ],
+      "id": "7726f15a-6f45-4268-a408-88ca69dbd870",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "wzOKt66hLwPyEapv",
+          "name": "ElevenLabs AAIVA Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "=/aaiva/{{Date.now()}}.mp3",
+        "binaryData": true
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        140,
+        -180
+      ],
+      "id": "f870acb7-eded-4801-9bda-f7a465a37648",
+      "name": "Dropbox",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "Wu8zmRHsRGY7mDwl",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0aaf718d-6b30-4327-9c01-dc1e82dfe27c",
+              "name": "direct_dropbox_url",
+              "value": "={{$json[\"url\"].replace(\"dl=0\", \"dl=1\")}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        580,
+        -180
+      ],
+      "id": "b9f4fe21-4b8b-4015-90f1-27699984cf37",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appT8aQptl1Gx3zrs",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl8EaQHZmY23kPsn",
+          "mode": "list",
+          "cachedResultName": "Scripts",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs/tbl8EaQHZmY23kPsn"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Active": true,
+            "Spoken Audio": "=[     {         \"url\": \"{{ $json.direct_dropbox_url }}\",         \"filename\": \"{{ $('Get link to file in Dropbox').item.json.name }}\"     } ]",
+            "ID": "={{ $('Airtable').item.json.ID }}",
+            "Spoken Audio URL": "={{ $json.direct_dropbox_url }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Script",
+              "displayName": "Script",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Spoken Audio",
+              "displayName": "Spoken Audio",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Spoken Audio URL",
+              "displayName": "Spoken Audio URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Active",
+              "displayName": "Active",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Segments",
+              "displayName": "Segments",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        800,
+        -180
+      ],
+      "id": "3017356e-754d-40eb-a251-9b9bd9a1f872",
+      "name": "Airtable1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "U0UoJUqDqx0lz2Sv",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "=json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={\n  \"path\": \"{{ $json.path_lower }}\",\n  \"settings\": {\n    \"access\": \"viewer\",\n    \"allow_download\": true,\n    \"audience\": \"public\",\n    \"requested_visibility\": \"public\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        360,
+        -180
+      ],
+      "id": "1f287b51-4ea3-4f1c-a121-c535988d96c0",
+      "name": "Get link to file in Dropbox",
+      "credentials": {
+        "oAuth2Api": {
+          "id": "kqWjehvHdrh3sLwm",
+          "name": "Dropbox OAuth2 Refresh Token Cred AAIVA"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Dropbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dropbox": {
+      "main": [
+        [
+          {
+            "node": "Get link to file in Dropbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Airtable1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get link to file in Dropbox": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fce05d71-9912-42bf-a092-1de64211dc6e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "jxAB6TDob7cubq2h",
+  "tags": []
+}

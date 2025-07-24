@@ -1,0 +1,337 @@
+{
+  "name": "HELPER - Upload Init Image",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -700,
+        -160
+      ],
+      "id": "50d4c851-02df-41b2-9818-43959e1cb013",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "base": {
+          "__rl": true,
+          "value": "appT8aQptl1Gx3zrs",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblnNJPVhhIhfW17S",
+          "mode": "list",
+          "cachedResultName": "Miscellaneous",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs/tblnNJPVhhIhfW17S"
+        },
+        "id": "recSxC1LF3N3VMtaj",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -480,
+        -160
+      ],
+      "id": "a2803a29-ef2c-4f6e-b94d-badd8c81d0c1",
+      "name": "Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "U0UoJUqDqx0lz2Sv",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cloud.leonardo.ai/api/rest/v1/init-image",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "extension",
+              "value": "jpg"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -260,
+        -160
+      ],
+      "id": "caa469da-3793-4cc2-a113-6979951e66a4",
+      "name": "Get presigned URL",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "mzxEUQiexFha082v",
+          "name": "Leonardo.ai Auth Header AAIVA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Airtable').item.json.Images[0].url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        -160
+      ],
+      "id": "b81faef8-dc18-4fbb-b562-0391fdf6dcf8",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.uploadInitImage.url }}",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "image/jpeg"
+            },
+            {
+              "name": "bucket",
+              "value": "={{$json.uploadInitImage.fields.parseJson()['bucket']}}"
+            },
+            {
+              "name": "X-Amz-Algorithm",
+              "value": "={{$json.uploadInitImage.fields.parseJson()['X-Amz-Algorithm']}}"
+            },
+            {
+              "name": "X-Amz-Credential",
+              "value": "={{$json.uploadInitImage.fields.parseJson()['X-Amz-Credential']}}"
+            },
+            {
+              "name": "X-Amz-Date",
+              "value": "={{$json.uploadInitImage.fields.parseJson()['X-Amz-Date']}}"
+            },
+            {
+              "name": "X-Amz-Security-Token",
+              "value": "={{$json.uploadInitImage.fields.parseJson()['X-Amz-Security-Token']}}"
+            },
+            {
+              "name": "key",
+              "value": "={{$json.uploadInitImage.fields.parseJson()['key']}}"
+            },
+            {
+              "name": "Policy",
+              "value": "={{$json.uploadInitImage.fields.parseJson()['Policy']}}"
+            },
+            {
+              "name": "X-Amz-Signature",
+              "value": "={{$json.uploadInitImage.fields.parseJson()['X-Amz-Signature']}}"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        180,
+        -160
+      ],
+      "id": "8d6d154b-e788-47e3-8665-410f2e9b9025",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appT8aQptl1Gx3zrs",
+          "mode": "list",
+          "cachedResultName": "AAIVA",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblnNJPVhhIhfW17S",
+          "mode": "list",
+          "cachedResultName": "Miscellaneous",
+          "cachedResultUrl": "https://airtable.com/appT8aQptl1Gx3zrs/tblnNJPVhhIhfW17S"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Airtable').item.json.id }}",
+            "Init Image ID": "={{ $('Get presigned URL').item.json.uploadInitImage.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Images",
+              "displayName": "Images",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Init Image ID",
+              "displayName": "Init Image ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        400,
+        -160
+      ],
+      "id": "7606141a-b37a-4260-a286-b9be4d3c55b8",
+      "name": "Airtable1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "U0UoJUqDqx0lz2Sv",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable": {
+      "main": [
+        [
+          {
+            "node": "Get presigned URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get presigned URL": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Airtable1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0c4c8d79-8926-426f-a55c-ee6068765055",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "ew7zVMI4f00aIppd",
+  "tags": []
+}

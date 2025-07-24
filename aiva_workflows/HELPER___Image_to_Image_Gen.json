@@ -1,0 +1,199 @@
+{
+  "name": "HELPER - Image to Image Gen",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cloud.leonardo.ai/api/rest/v1/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"modelId\": \"1e60896f-3c26-4296-8ecc-53e2afecc132\",\n  \"contrast\": {{Number.parseFloat(3.5)}},\n  \"prompt\": \"A man smiling\",\n  \"num_images\": {{Number.parseInt(1)}},\n  \"width\": {{Number.parseInt(864)}},\n  \"height\": {{Number.parseInt(1536)}},\n  \"styleUUID\": \"dee282d3-891f-4f73-ba02-7f8131e5541b\",\n  \"enhancePrompt\": {{Boolean(false)}},\n  \"init_image_id\": \"cc9bde5c-11cc-4637-a064-17b45d9c63ce\",\n  \"init_strength\": {{Number(0.8)}}\n  \n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -560,
+        35
+      ],
+      "id": "1631d878-c3e4-4649-878f-6805eb022fd9",
+      "name": "Gen image with Leonardo.ai",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "mzxEUQiexFha082v",
+          "name": "Leonardo.ai Auth Header AAIVA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://cloud.leonardo.ai/api/rest/v1/generations/{{ $(\"Gen image with Leonardo.ai\").item.json.sdGenerationJob.generationId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -340,
+        35
+      ],
+      "id": "848db831-97f8-4056-bf68-efbaab3cef14",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "mzxEUQiexFha082v",
+          "name": "Leonardo.ai Auth Header AAIVA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2b0d3c1b-a572-451a-8b1a-10dca2a39a01",
+              "leftValue": "={{ $json.generations_by_pk.status }}",
+              "rightValue": "COMPLETE",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -120,
+        -40
+      ],
+      "id": "4cf61018-fbbe-4e00-99b4-5f0ba887ce08",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        100,
+        35
+      ],
+      "id": "faf7a6c8-558c-49f1-a076-36c220fe7c0f",
+      "name": "Wait",
+      "webhookId": "f108aa3e-b72b-4c71-bc91-8e66aff50790"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -780,
+        35
+      ],
+      "id": "386c521d-b7f5-46f2-a554-3a81d7d67540",
+      "name": "When clicking ‘Test workflow’"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gen image with Leonardo.ai": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Gen image with Leonardo.ai",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "26c92418-8858-4cca-8f61-b8709242dec3",
+  "meta": {
+    "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
+  },
+  "id": "siUGSSVGpfRPA3wD",
+  "tags": []
+}
