@@ -25,14 +25,14 @@
       "typeVersion": 2.1,
       "position": [
         360,
-        -1060
+        -1240
       ],
       "id": "7ccd373f-c814-4eac-80e0-505ef3f31db9",
       "name": "Get script",
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -60,15 +60,15 @@
       "typeVersion": 2.1,
       "position": [
         580,
-        -1060
+        -1240
       ],
       "id": "13a33f0c-fc5b-43f2-9b11-5fb877d9411b",
       "name": "Get segments",
       "alwaysOutputData": true,
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -78,7 +78,7 @@
       "typeVersion": 1,
       "position": [
         140,
-        -1060
+        -1240
       ],
       "id": "62fd576d-8810-4ced-b637-9d0bb3ed83e0",
       "name": "When clicking ‘Test workflow’"
@@ -122,7 +122,7 @@
       "typeVersion": 2.2,
       "position": [
         800,
-        -1060
+        -1240
       ],
       "id": "63b75571-8f10-4ab6-8231-0a7efdee1d9b",
       "name": "If"
@@ -333,14 +333,14 @@
       "typeVersion": 2.1,
       "position": [
         1240,
-        -1060
+        -1240
       ],
       "id": "be147946-fbb2-4b95-8a4c-1e0a334c2787",
       "name": "Airtable",
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -361,11 +361,11 @@
           "parameters": [
             {
               "name": "prompt",
-              "value": "={{ $json['Video Prompt'] }}"
+              "value": "={{ $json['Image Prompt'] }}"
             },
             {
               "name": "image_url",
-              "value": "={{ $json['Image URL'] }}"
+              "value": "={{ $json.Image[0].url }}"
             },
             {
               "name": "duration",
@@ -379,14 +379,14 @@
       "typeVersion": 4.2,
       "position": [
         1020,
-        -1060
+        -1240
       ],
       "id": "eea26932-e403-4ad7-9360-97e471f921c1",
       "name": "Gen Video",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "39gbz4nFqvf1yvtB",
-          "name": "Fal.ai API Header AAIVA"
+          "id": "rnbwZfPi9wDKU3nQ",
+          "name": "Fal.ai Auth Header JUL-AI"
         }
       }
     }
@@ -453,7 +453,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "309b43a2-3421-4436-bfe5-810e0ae3f0dd",
+  "versionId": "892d458d-440f-41ea-952a-40ec52a85e2a",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"

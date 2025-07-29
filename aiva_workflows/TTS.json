@@ -42,8 +42,8 @@
       "name": "Airtable",
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -75,7 +75,11 @@
             }
           ]
         },
-        "options": {}
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -87,54 +91,10 @@
       "name": "HTTP Request",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "wzOKt66hLwPyEapv",
-          "name": "ElevenLabs AAIVA Auth"
+          "id": "MNID48LNuwKISm0N",
+          "name": "Eleven Lab Auth Header JULAI"
         }
       }
-    },
-    {
-      "parameters": {
-        "authentication": "oAuth2",
-        "path": "=/aaiva/{{Date.now()}}.mp3",
-        "binaryData": true
-      },
-      "type": "n8n-nodes-base.dropbox",
-      "typeVersion": 1,
-      "position": [
-        140,
-        -180
-      ],
-      "id": "f870acb7-eded-4801-9bda-f7a465a37648",
-      "name": "Dropbox",
-      "credentials": {
-        "dropboxOAuth2Api": {
-          "id": "Wu8zmRHsRGY7mDwl",
-          "name": "Dropbox account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "0aaf718d-6b30-4327-9c01-dc1e82dfe27c",
-              "name": "direct_dropbox_url",
-              "value": "={{$json[\"url\"].replace(\"dl=0\", \"dl=1\")}}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        580,
-        -180
-      ],
-      "id": "b9f4fe21-4b8b-4015-90f1-27699984cf37",
-      "name": "Edit Fields"
     },
     {
       "parameters": {
@@ -157,9 +117,9 @@
           "mappingMode": "defineBelow",
           "value": {
             "Active": true,
-            "Spoken Audio": "=[     {         \"url\": \"{{ $json.direct_dropbox_url }}\",         \"filename\": \"{{ $('Get link to file in Dropbox').item.json.name }}\"     } ]",
+            "Spoken Audio": "=[\n  {\n    \"url\": \"{{ $('Google Drive').item.json.webContentLink }}\",\n    \"filename\": \"{{ $('Google Drive').item.json.name }}\"\n  }\n]",
             "ID": "={{ $('Airtable').item.json.ID }}",
-            "Spoken Audio URL": "={{ $json.direct_dropbox_url }}"
+            "Spoken Audio URL": "="
           },
           "matchingColumns": [
             "ID"
@@ -250,46 +210,80 @@
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
       "position": [
-        800,
+        600,
         -180
       ],
       "id": "3017356e-754d-40eb-a251-9b9bd9a1f872",
       "name": "Airtable1",
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "oAuth2Api",
-        "sendBody": true,
-        "specifyBody": "=json",
-        "bodyParameters": {
-          "parameters": [
-            {}
-          ]
+        "name": "={{Date.now()}}.mp3",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
         },
-        "jsonBody": "={\n  \"path\": \"{{ $json.path_lower }}\",\n  \"settings\": {\n    \"access\": \"viewer\",\n    \"allow_download\": true,\n    \"audience\": \"public\",\n    \"requested_visibility\": \"public\"\n  }\n}",
+        "folderId": {
+          "__rl": true,
+          "value": "1bcxynvLbjYTTjbBeq0cNhRGRaFTsXwxJ",
+          "mode": "list",
+          "cachedResultName": "scratch",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1bcxynvLbjYTTjbBeq0cNhRGRaFTsXwxJ"
+        },
         "options": {}
       },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        140,
+        -180
+      ],
+      "id": "4290f901-f561-4791-acd0-afc570a3244e",
+      "name": "Google Drive",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "36J3VgZqDCuobPAV",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "anyone"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
       "position": [
         360,
         -180
       ],
-      "id": "1f287b51-4ea3-4f1c-a121-c535988d96c0",
-      "name": "Get link to file in Dropbox",
+      "id": "eb5b3b66-2df4-4e59-818b-193a86400a01",
+      "name": "Google Drive1",
       "credentials": {
-        "oAuth2Api": {
-          "id": "kqWjehvHdrh3sLwm",
-          "name": "Dropbox OAuth2 Refresh Token Cred AAIVA"
+        "googleDriveOAuth2Api": {
+          "id": "36J3VgZqDCuobPAV",
+          "name": "Google Drive account"
         }
       }
     }
@@ -322,40 +316,29 @@
       "main": [
         [
           {
-            "node": "Dropbox",
+            "node": "Google Drive",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Dropbox": {
+    "Google Drive": {
       "main": [
         [
           {
-            "node": "Get link to file in Dropbox",
+            "node": "Google Drive1",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Edit Fields": {
+    "Google Drive1": {
       "main": [
         [
           {
             "node": "Airtable1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get link to file in Dropbox": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
             "type": "main",
             "index": 0
           }
@@ -367,7 +350,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "fce05d71-9912-42bf-a092-1de64211dc6e",
+  "versionId": "b3b0a105-b7d9-4449-8167-edf3dd1cd867",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"

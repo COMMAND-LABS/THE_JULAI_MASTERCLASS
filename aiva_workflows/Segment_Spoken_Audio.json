@@ -42,14 +42,14 @@
       "name": "Get script",
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
     {
       "parameters": {
-        "url": "={{ $json['Spoken Audio URL'] }}",
+        "url": "={{ $json['Spoken Audio'][0].url }}",
         "options": {
           "response": {
             "response": {
@@ -98,8 +98,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -128,7 +128,8 @@
               "value": "verbose_json"
             },
             {
-              "name": "prompt"
+              "name": "prompt",
+              "value": "I'd like a total of 9 segments"
             },
             {
               "parameterType": "formBinaryData",
@@ -149,8 +150,8 @@
       "name": "Generate transcription",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "JTSpC6xMvEuz12SZ",
-          "name": "Open AI API AAIVA cred"
+          "id": "Ve8Ns6JFnhPP4Ifk",
+          "name": "OpenAI Auth Cred JULAI"
         }
       }
     },
@@ -426,8 +427,8 @@
       "name": "Airtable",
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -881,7 +882,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "4f679453-1d8b-442f-93a4-7a9d2d20d208",
+  "versionId": "b176fb0d-1193-4611-9f53-422e2b032bc1",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"

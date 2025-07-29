@@ -25,14 +25,14 @@
       "typeVersion": 2.1,
       "position": [
         -300,
-        -55
+        -15
       ],
       "id": "102f883b-ce00-4cce-a0c1-6368db073ee1",
       "name": "Get script",
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -42,7 +42,7 @@
       "typeVersion": 1,
       "position": [
         -520,
-        -55
+        -15
       ],
       "id": "2bf8793c-21c3-4dea-81b2-bb704785894a",
       "name": "When clicking ‘Test workflow’"
@@ -71,15 +71,15 @@
       "typeVersion": 2.1,
       "position": [
         -80,
-        -55
+        -15
       ],
       "id": "4828e7f5-d1d6-4050-9423-dd7ef39ac47e",
       "name": "Get segments",
       "alwaysOutputData": true,
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -105,14 +105,14 @@
       "typeVersion": 1.8,
       "position": [
         140,
-        -55
+        -15
       ],
       "id": "5a6fcf19-3ae9-4901-ba06-f4f3c22e5c20",
       "name": "OpenAI",
       "credentials": {
         "openAiApi": {
-          "id": "lS6uuMnyNQKbwbkx",
-          "name": "OpenAi API AAIVA"
+          "id": "eYn0g6FUjUQIGVDq",
+          "name": "OpenAI Header JULAI 2"
         }
       }
     },
@@ -140,14 +140,14 @@
       "typeVersion": 4.2,
       "position": [
         516,
-        -55
+        -15
       ],
       "id": "d9e30da9-c333-4617-a1cd-49d6cabce47c",
       "name": "Gen image with Leonardo.ai",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "mzxEUQiexFha082v",
-          "name": "Leonardo.ai Auth Header AAIVA"
+          "id": "Io42fJHPs9Tx5daY",
+          "name": "Leonardo.ai API AUTH HEADER JULAI"
         }
       }
     },
@@ -171,7 +171,7 @@
       "typeVersion": 4.2,
       "position": [
         736,
-        -55
+        -15
       ],
       "id": "838ed601-7a9a-4b9b-9543-a602cbde2672",
       "name": "HTTP Request",
@@ -211,7 +211,7 @@
       "typeVersion": 2.2,
       "position": [
         956,
-        -130
+        -90
       ],
       "id": "165a61e0-3549-4f70-a00e-836b60375e86",
       "name": "If"
@@ -224,100 +224,11 @@
       "typeVersion": 1.1,
       "position": [
         1176,
-        45
+        85
       ],
       "id": "1078f610-104e-4036-a379-7f7614233be9",
       "name": "Wait",
       "webhookId": "f108aa3e-b72b-4c71-bc91-8e66aff50790"
-    },
-    {
-      "parameters": {
-        "url": "={{ $json.generations_by_pk.generated_images[0].url }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1176,
-        -180
-      ],
-      "id": "e45cf35b-0af8-4af7-bc08-ef1c114beb41",
-      "name": "HTTP Request1"
-    },
-    {
-      "parameters": {
-        "authentication": "oAuth2",
-        "path": "=/aaiva/{{Date.now()}}.mp3",
-        "binaryData": true
-      },
-      "type": "n8n-nodes-base.dropbox",
-      "typeVersion": 1,
-      "position": [
-        1396,
-        -180
-      ],
-      "id": "f84f8696-f0b3-4fc9-8002-8407f2638a1b",
-      "name": "Dropbox",
-      "credentials": {
-        "dropboxOAuth2Api": {
-          "id": "Wu8zmRHsRGY7mDwl",
-          "name": "Dropbox account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "0aaf718d-6b30-4327-9c01-dc1e82dfe27c",
-              "name": "direct_dropbox_url",
-              "value": "={{$json[\"url\"].replace(\"dl=0\", \"dl=1\")}}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        1836,
-        -180
-      ],
-      "id": "6bc7dd8a-c984-4f71-b9a0-b0fcac5573ee",
-      "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "oAuth2Api",
-        "sendBody": true,
-        "specifyBody": "=json",
-        "bodyParameters": {
-          "parameters": [
-            {}
-          ]
-        },
-        "jsonBody": "={\n  \"path\": \"{{ $json.path_lower }}\",\n  \"settings\": {\n    \"access\": \"viewer\",\n    \"allow_download\": true,\n    \"audience\": \"public\",\n    \"requested_visibility\": \"public\"\n  }\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        1616,
-        -180
-      ],
-      "id": "da5c6e56-dd4f-4e83-8880-799704cfe7ab",
-      "name": "Get link to file in Dropbox",
-      "credentials": {
-        "oAuth2Api": {
-          "id": "kqWjehvHdrh3sLwm",
-          "name": "Dropbox OAuth2 Refresh Token Cred AAIVA"
-        }
-      }
     },
     {
       "parameters": {
@@ -343,7 +254,7 @@
             "ID": "={{ $('Get segments').item.json.ID }}",
             "Image URL": "={{ $json.direct_dropbox_url }}",
             "Image Prompt": "={{ $('OpenAI').item.json.message.content.imagePrompt }}",
-            "Image": "=[\n  {\n    \"url\": \"{{ $json.direct_dropbox_url }}\",\n    \"filename\": \"{{ $('Get link to file in Dropbox').item.json.name }}\"\n  }\n]",
+            "Image": "=[\n  {\n    \"url\": \"{{ $json.generations_by_pk.generated_images[0].url }}\",\n    \"filename\": \"test.jpg\"\n  }\n]",
             "Start Time": "={{ $('Get segments').item.json['Start Time'] }}",
             "End Time": "={{ $('Get segments').item.json['End Time'] }}"
           },
@@ -524,15 +435,15 @@
       "type": "n8n-nodes-base.airtable",
       "typeVersion": 2.1,
       "position": [
-        2056,
-        -180
+        1176,
+        -140
       ],
       "id": "c4fd7905-babc-40ba-a59c-6bc81ecd7de7",
       "name": "Airtable",
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     }
@@ -609,7 +520,7 @@
       "main": [
         [
           {
-            "node": "HTTP Request1",
+            "node": "Airtable",
             "type": "main",
             "index": 0
           }
@@ -633,57 +544,13 @@
           }
         ]
       ]
-    },
-    "Dropbox": {
-      "main": [
-        [
-          {
-            "node": "Get link to file in Dropbox",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get link to file in Dropbox": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HTTP Request1": {
-      "main": [
-        [
-          {
-            "node": "Dropbox",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Edit Fields": {
-      "main": [
-        [
-          {
-            "node": "Airtable",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "a4c96b9f-5efa-41c1-a3b8-135c24cf282e",
+  "versionId": "e7a83846-97bb-4fa6-80b3-7171f0322352",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"

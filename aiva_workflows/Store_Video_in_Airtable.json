@@ -31,8 +31,8 @@
       "name": "Get script",
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -67,8 +67,8 @@
       "alwaysOutputData": true,
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -328,8 +328,8 @@
       "name": "Airtable",
       "credentials": {
         "airtableTokenApi": {
-          "id": "U0UoJUqDqx0lz2Sv",
-          "name": "Airtable Personal Access Token account"
+          "id": "DAHK5iuhyvuqfvGj",
+          "name": "Airtable PAT JULAI"
         }
       }
     },
@@ -418,7 +418,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "875f6994-58f4-44b0-9bd4-dea0f3e273d0",
+  "versionId": "7b3074c3-c109-4444-956b-5f3bbc741adc",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "59163ef64e1cf4dcd8e0818ffdc09c87dbd57c11199a791813b2ff3820cc01aa"
